@@ -3,7 +3,7 @@ const config = require('config');
 
 module.exports = function (req, res, next) {
   // Access the token sent
-  const token = req.header('JWT');
+  const token = req.header('x-auth-token');
 
   // Check if token is present
   if (!token) {
