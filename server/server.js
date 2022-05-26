@@ -6,6 +6,8 @@ require('dotenv').config();
 // Connect to DB server
 connectDB();
 
+// const { PORT } = process.env;
+
 // Initial Middleware
 app.use(express.json({ extended: false })); // Allow data to come through request body
 
@@ -17,6 +19,6 @@ app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/posts'));
 
-const PORT = process.env.PORT || 5000;
+const PORT = 8005;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
