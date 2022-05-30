@@ -4,15 +4,7 @@ const db = config.get('mongoURI');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(
-      db
-      /**
-       * Whenever these is an error about URL string parsing resolve with this
-       */
-      // {
-      //   useCreateIndex: true,
-      // }
-    );
+    await mongoose.connect(db);
   } catch (err) {
     console.log(err.message);
     // Exiting process on failure
