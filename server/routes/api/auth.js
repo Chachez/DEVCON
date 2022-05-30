@@ -9,6 +9,8 @@ const bcrypt = require('bcryptjs');
 const auth = require('../../middleware/auth');
 const User = require('../../models/User');
 
+const { jwtSecret } = process.env;
+
 /**
  * @route GET api/auth
  * @description Test route
@@ -65,15 +67,10 @@ router.post(
           id: user.id,
         },
       };
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
+      jwt.sign(payload, jwtSecret, { expiresIn: 360000 }, (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      });
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server Error!!');
