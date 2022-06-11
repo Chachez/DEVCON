@@ -1,8 +1,6 @@
 import { authentication } from '../helpers/authActionTypes';
 
-const initialState = {
-  isAuthenticated: false,
-};
+const initialState = { isAuthenticated: false, accessToken: null };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -10,6 +8,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: true,
+        accessToken: action.payload,
       };
     default:
       return state;
