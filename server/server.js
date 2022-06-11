@@ -2,6 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const app = express();
 require('dotenv').config();
+const cors = require('cors');
 
 // Connect to DB server
 connectDB();
@@ -9,7 +10,8 @@ connectDB();
 const { PORT } = process.env;
 
 // Initial Middleware
-app.use(express.json({ extended: false })); // Allow data to come through request body
+app.use(express.json({ extended: false }), cors()); // Allow data to come through request body
+app.options('*', cors());
 
 app.get('/', (req, res) => res.send('API is up and Running'));
 
