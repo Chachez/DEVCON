@@ -1,38 +1,26 @@
 import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
+import thunk from 'redux-thunk';
+
 import rootReducer from './rootReducer';
 
-//Persisting State on Refresh
-function savetoLocalStorage(state) {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem('state', serializedState);
-  } catch (e) {}
-}
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+};
 
-function loadfromLocalStorage() {
-  try {
-    const serializedState = localStorage.getItem('state');
-    if (serializedState === null) return undefined;
-    return JSON.parse(serializedState);
-  } catch (e) {
-    return undefined;
-  }
-}
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Middleware wraps store's dispatch method.
 const middleware = [thunk];
 
-const persistedState = loadfromLocalStorage();
-
-//Pass the root Reducer
 const store = createStore(
-  rootReducer,
-  persistedState,
+  persistedReducer,
   composeWithDevTools(applyMiddleware(...middleware))
 );
 
-store.subscribe(() => savetoLocalStorage(store.getState()));
+const persistor = persistStore(store);
 
-export default store;
+export { store, persistor };

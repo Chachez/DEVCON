@@ -7,25 +7,31 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { SnackbarProvider } from 'notistack';
 import { Slide } from '@mui/material';
+import { PersistGate } from 'redux-persist/integration/react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import store from './redux/store';
+import { store, persistor } from './redux/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <SnackbarProvider
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        TransitionComponent={Slide}
-        preventDuplicate
-        dense
-      >
-        <App />
-      </SnackbarProvider>
-    </Provider>
+    <Router>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <SnackbarProvider
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            TransitionComponent={Slide}
+            preventDuplicate
+            dense
+          >
+            <App />
+          </SnackbarProvider>
+        </PersistGate>
+      </Provider>
+    </Router>
   </React.StrictMode>
 );
 
