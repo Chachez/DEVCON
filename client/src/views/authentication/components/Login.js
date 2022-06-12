@@ -1,6 +1,14 @@
 import * as React from 'react';
-import { Avatar, Grid, CssBaseline, Box, Container, Link } from '@mui/material';
+import {
+  Avatar,
+  Grid,
+  CssBaseline,
+  Container,
+  Link,
+  Typography,
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { ErrorMessage, Form, Field, Formik } from 'formik';
@@ -9,6 +17,24 @@ import { useSnackbar } from 'notistack';
 
 import Controls from '../../../components/Controls';
 import { login } from '../../../redux/actions/authActions';
+
+const Copyright = (props) => {
+  return (
+    <Typography
+      variant='body2'
+      color='text.secondary'
+      align='center'
+      {...props}
+    >
+      {'Copyright © '}
+      <Link color='inherit' href='#'>
+        Michael's Site
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+};
 
 const theme = createTheme();
 
@@ -22,6 +48,8 @@ const Login = () => {
     });
   };
   const reduxState = useSelector((state) => state, shallowEqual);
+  console.log(reduxState);
+  const navigate = useNavigate();
 
   const initialValues = {
     email: '',
@@ -44,7 +72,6 @@ const Login = () => {
             </Avatar>
             <Controls.Titles component='h1' variant='h5' label='Sign In' />
           </center>
-
           <Formik
             initialValues={initialValues}
             validationSchema={schema}
@@ -53,6 +80,7 @@ const Login = () => {
               await dispatch(login(data)).then((res) => {
                 const message = res.response.data.errors.map((err) => err.msg);
                 errorNotify(message);
+                navigate('/');
               });
               resetForm();
             }}
@@ -93,9 +121,22 @@ const Login = () => {
                   variant='contained'
                   sx={{ mt: 3, mb: 2 }}
                 />
+                <Grid container>
+                  <Grid item xs>
+                    <Link href='#' variant='body2'>
+                      Forgot password?
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    <Link href='#' variant='body2'>
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
+                </Grid>
               </Form>
             )}
-          </Formik>
+          </Formik>{' '}
+          <Copyright sx={{ mt: 8, mb: 4 }} />
         </div>
       </Container>
     </ThemeProvider>
