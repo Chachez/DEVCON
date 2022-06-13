@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { authentication } from '../helpers/authActionTypes';
+import { authentication } from '../constants/authActionTypes';
 import { baseUrl } from '../../services/baseUrl';
 
 export const login = (data) => async (dispatch) => {

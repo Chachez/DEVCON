@@ -9,6 +9,7 @@ import rootReducer from './rootReducer';
 const persistConfig = {
   key: 'root',
   version: 1,
+  blacklist: ['nav'],
   storage,
 };
 

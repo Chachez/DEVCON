@@ -10,8 +10,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/material/styles';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import Controls from '../../../components/Controls';
+import { openDrawer } from '../../../redux/actions/navActions';
 
 const drawerWidth = 240;
 
@@ -33,9 +35,15 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const TopBar = ({ toggleDrawer, open }) => {
+const TopBar = (props) => {
+  const dispatch = useDispatch();
+  const reduxState = useSelector((state) => state, shallowEqual);
+
+  const toggleDrawer = () => {
+    dispatch(openDrawer(!reduxState.nav.drawerOpen));
+  };
   return (
-    <AppBar position='absolute' open={open}>
+    <AppBar position='absolute' open={reduxState.nav.drawerOpen}>
       <Toolbar
         sx={{
           pr: '24px', // keep right padding when drawer closed
@@ -48,7 +56,7 @@ const TopBar = ({ toggleDrawer, open }) => {
           onClick={toggleDrawer}
           sx={{
             marginRight: '36px',
-            ...(open && { display: 'none' }),
+            ...(reduxState.nav.drawerOpen && { display: 'none' }),
           }}
         >
           <MenuIcon />
@@ -74,7 +82,7 @@ const TopBar = ({ toggleDrawer, open }) => {
 };
 
 TopBar.propTypes = {
-  toggleDrawer: PropTypes.func,
+  toggleDrawer: PropTypes.any,
   open: PropTypes.bool,
 };
 

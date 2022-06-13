@@ -1,4 +1,4 @@
-import { authentication } from '../helpers/authActionTypes';
+import { authentication } from '../constants/authActionTypes';
 
 let user = JSON.parse(localStorage.getItem('state'));
 const initialState = user ? { isAuthenticated: true, user } : null;
