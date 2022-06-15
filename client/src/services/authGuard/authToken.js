@@ -1,15 +1,15 @@
-export const authToken = (getState) => {
-  const token = getState.auth.access_token;
+import api from './api';
 
-  const headers = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-  };
+// store our JWT in LS and set axios headers if we do have a token
 
+const setAuthToken = (token) => {
   if (token) {
-    headers.headers['x-auth-token'] = token;
+    api.defaults.headers.common['x-auth-token'] = token;
+    localStorage.setItem('token', token);
+  } else {
+    delete api.defaults.headers.common['x-auth-token'];
+    localStorage.removeItem('token');
   }
-  return headers;
 };
+
+export default setAuthToken;

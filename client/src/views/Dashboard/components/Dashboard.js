@@ -1,12 +1,7 @@
 import React from 'react';
-import DefaultLayout from '../../../Layouts/DefaultLayout';
 
 const Dashboard = () => {
-  return (
-    <div>
-      <DefaultLayout />
-    </div>
-  );
+  return <div>ghjk</div>;
 };
 
 export default Dashboard;

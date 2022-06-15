@@ -1,4 +1,6 @@
 export const authentication = {
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+  LOAD_USER: 'LOAD_USER',
   REGISTER_SUCCESS: 'REGISTER_SUCCESS',
+  LOGOUT: 'LOGOUT',
 };
