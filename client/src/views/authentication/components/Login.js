@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { ErrorMessage, Form, Field, Formik } from 'formik';
@@ -48,7 +48,6 @@ const Login = () => {
     });
   };
   const reduxState = useSelector((state) => state, shallowEqual);
-  console.log(reduxState);
   const navigate = useNavigate();
 
   const initialValues = {
@@ -59,6 +58,10 @@ const Login = () => {
     email: Yup.string().required('Email is required').email('Email is invalid'),
     password: Yup.string().required('Password is required'),
   });
+
+  if (reduxState.auth.isAuthenticated) {
+    return <Navigate to='/dashboard' />;
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -80,7 +83,7 @@ const Login = () => {
               await dispatch(login(data)).then((res) => {
                 const message = res.response.data.errors.map((err) => err.msg);
                 errorNotify(message);
-                navigate('/');
+                navigate('/dashboard');
               });
               resetForm();
             }}

@@ -1,17 +1,27 @@
-import axios from 'axios';
+import api from '../../services/authGuard/api';
 
 import { authentication } from '../constants/authActionTypes';
-import { baseUrl } from '../../services/baseUrl';
 
 export const login = (data) => async (dispatch) => {
-  return await axios
-    .post(baseUrl + 'auth', data)
-    .then((res) => {
-      dispatch({ type: authentication.LOGIN_SUCCESS, payload: res.data });
-      return res;
-    })
-    .catch(async (err) => {
-      Promise.reject(err?.response);
-      return err;
-    });
+  try {
+    const res = await api.post('/auth', data);
+    dispatch({ type: authentication.LOGIN_SUCCESS, payload: res });
+    return res;
+  } catch (err) {
+    Promise.reject(err?.response);
+    return err;
+  }
 };
+
+export const getUser = () => async (dispatch) => {
+  try {
+    const res = await api.get('/auth');
+    dispatch({ type: authentication.LOAD_USER, payload: res.data });
+    return res;
+  } catch (err) {
+    Promise.reject(err?.response);
+    return err;
+  }
+};
+
+export const logout = () => ({ type: authentication.LOGOUT });

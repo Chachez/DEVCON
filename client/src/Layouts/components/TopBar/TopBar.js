@@ -1,67 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  AppBar as MuiAppBar,
+  AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Badge,
+  Menu,
+  MenuItem,
+  Link,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { styled } from '@mui/material/styles';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import PropTypes from 'prop-types';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-
+import { useSelector, shallowEqual } from 'react-redux';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import Controls from '../../../components/Controls';
-import { openDrawer } from '../../../redux/actions/navActions';
 
-const drawerWidth = 240;
+const menu = [{ name: 'Developers', href: '/developers' }];
+const profile = [{ name: 'Profile', href: '/profile' }, { name: 'Logout' }];
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const TopBar = (props) => {
-  const dispatch = useDispatch();
+const TopBar = () => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const reduxState = useSelector((state) => state, shallowEqual);
-
-  const toggleDrawer = () => {
-    dispatch(openDrawer(!reduxState.nav.drawerOpen));
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
   };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <AppBar position='absolute' open={reduxState.nav.drawerOpen}>
-      <Toolbar
-        sx={{
-          pr: '24px', // keep right padding when drawer closed
-        }}
-      >
-        <IconButton
-          edge='start'
-          color='inherit'
-          aria-label='open drawer'
-          onClick={toggleDrawer}
-          sx={{
-            marginRight: '36px',
-            ...(reduxState.nav.drawerOpen && { display: 'none' }),
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
-
+      <Toolbar>
         <Typography
           component='h1'
           variant='h6'
@@ -71,19 +38,56 @@ const TopBar = (props) => {
         >
           Github Connect
         </Typography>
-        <IconButton color='inherit'>
-          <Badge badgeContent={4} color='secondary'>
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
+
+        {menu.map((menu, index) => (
+          <Typography
+            key={index}
+            variant='h6'
+            component='div'
+            sx={{ flexGrow: 1 }}
+          >
+            {menu.name}
+          </Typography>
+        ))}
+        <div>
+          <IconButton
+            size='large'
+            aria-label='account of current user'
+            aria-controls='menu-appbar'
+            aria-haspopup='true'
+            onClick={handleMenu}
+            color='inherit'
+          >
+            <AccountCircle />
+          </IconButton>
+          <Menu
+            id='menu-appbar'
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            {profile.map((prof, index) => (
+              <MenuItem key={index} onClick={handleClose}>
+                <Link href={prof.href} underline='none' color='inherit'>
+                  {' '}
+                  {prof.name}
+                </Link>
+              </MenuItem>
+            ))}
+          </Menu>
+        </div>
       </Toolbar>
     </AppBar>
   );
-};
-
-TopBar.propTypes = {
-  toggleDrawer: PropTypes.any,
-  open: PropTypes.bool,
 };
 
 export default TopBar;

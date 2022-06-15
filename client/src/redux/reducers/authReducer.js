@@ -1,16 +1,29 @@
 import { authentication } from '../constants/authActionTypes';
 
-let user = JSON.parse(localStorage.getItem('state'));
-const initialState = user ? { isAuthenticated: true, user } : null;
+const initialState = {
+  token: localStorage.getItem('token'),
+  isAuthenticated: false,
+  loading: true,
+  user: null,
+};
+
 const authReducer = (state = initialState, action) => {
-  switch (action.type) {
+  const { type, payload } = action;
+  switch (type) {
     case authentication.LOGIN_SUCCESS:
       return {
         ...state,
+        ...payload,
+        token: payload.data.token,
         isAuthenticated: true,
-        user: {
-          token: action.payload.token,
-        },
+        loading: false,
+      };
+    case authentication.LOAD_USER:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: payload,
       };
     default:
       return state;
