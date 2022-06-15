@@ -34,7 +34,6 @@ store.subscribe(() => {
     const token = currentState.auth.token;
     setAuthToken(token);
   }
-  console.log(currentState.auth.token);
 });
 
 export default store;

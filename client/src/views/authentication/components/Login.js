@@ -60,7 +60,7 @@ const Login = () => {
   });
 
   if (reduxState.auth.isAuthenticated) {
-    return <Navigate to='/dashboard' />;
+    return <Navigate to='/' />;
   }
 
   return (
